@@ -13,7 +13,13 @@ This means new maven coordinates and versioning scheme:
 ```gradle
 buildscript {
     ext.kotlin_version = '1.3.0-rc-57'
-    repositories { jcenter() } // no need in kotlinx repository
+    
+    // no need in kotlinx repository
+    repositories { 
+        jcenter() 
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap" } // while you are on 1.3-RC
+    } 
+    
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -48,9 +54,10 @@ apply plugin: 'kotlin' // or 'kotlin-platform-***' or 'kotlin-multiplatform'
 apply plugin: 'kotlinx-serialization'
 ```
 
-### IntelliJ IDEA
+### IntelliJ IDEA/Android Studio
 
-Works out of the box, if you have 1.3 Kotlin plugin installed.
+Works out of the box in 2018.2, 2018.3, Android Studio 3.2 and 3.3 — if you have 1.3 Kotlin plugin installed.
+Please note that projects with old version of kotlinx.serialization **will not be correctly imported**.
 In case of problems, force project re-import from Gradle. You still need to delegate build to Gradle:
 (`Settings - Build, Execution, Deployment - Build Tools - Gradle - Runner -` tick `Delegate IDE build/run actions to gradle`)
 
