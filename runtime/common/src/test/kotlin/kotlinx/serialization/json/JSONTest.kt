@@ -89,4 +89,23 @@ class JSONTest {
         assertEquals(Url("\u00c9"), JSON.parse("""{"url": "\u00c9"}"""))
         assertEquals(Url("""\\"""), JSON.parse("""{"url": "\\\\"}"""))
     }
+
+    @Serializable
+    data class Id(val id: Long, val number: Int)
+
+    @Test
+    fun testParse64IntToString() {
+        assertEquals(Id(1234567891011121314L, 123),
+            JSON.handle64IntStrings.parse("""{"id": "1234567891011121314", "number": 123}"""))
+        assertFailsWith<SerializationException> {
+            JSON.parse("""{"id":"111111111111110","number":"123"}""")
+        }
+    }
+
+    @Test
+    fun testSerialize64IntToString() {
+        assertEquals("""{"id":"123456789101112","number":3210}""", JSON.handle64IntStrings.stringify(
+            Id(123456789101112L, 3210))
+        )
+    }
 }

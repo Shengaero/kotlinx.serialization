@@ -26,6 +26,7 @@ class JSON(
     private val indented: Boolean = false,
     private val indent: String = "    ",
     internal val strictMode: Boolean = true,
+    internal val handle64IntStrings: Boolean = false,
     val updateMode: UpdateMode = UpdateMode.OVERWRITE,
     val encodeDefaults: Boolean = true
 ): AbstractSerialFormat(), StringFormat {
@@ -72,6 +73,7 @@ class JSON(
         val unquoted = JSON(unquoted = true)
         val indented = JSON(indented = true)
         val nonstrict = JSON(strictMode = false)
+        val handle64IntStrings = JSON(handle64IntStrings = true)
     }
 
     // Public visibility to allow casting in user-code to call [writeTree]
@@ -169,7 +171,10 @@ class JSON(
         override fun encodeByte(value: Byte) { if (forceQuoting) encodeString(value.toString()) else w.print(value) }
         override fun encodeShort(value: Short) { if (forceQuoting) encodeString(value.toString()) else w.print(value) }
         override fun encodeInt(value: Int) { if (forceQuoting) encodeString(value.toString()) else w.print(value) }
-        override fun encodeLong(value: Long) { if (forceQuoting) encodeString(value.toString()) else w.print(value) }
+        override fun encodeLong(value: Long) {
+            if (forceQuoting || handle64IntStrings) encodeString(value.toString()) else
+                w.print(value)
+        }
 
         override fun encodeFloat(value: Float) {
             if (strictMode && !value.isFinite()) {
@@ -253,7 +258,7 @@ class JSON(
             context = this@JSON.context
         }
 
-        fun readAsTree(): JsonElement = JsonTreeParser(p).read()
+        fun readAsTree(): JsonElement = JsonTreeParser(p, handle64IntStrings).read()
 
         override val updateMode: UpdateMode
             get() = this@JSON.updateMode

@@ -16,13 +16,17 @@
 
 package kotlinx.serialization.json
 
-class JsonTreeParser internal constructor(private val p: Parser) {
+class JsonTreeParser internal constructor(private val p: Parser, private val handle64IntStrings: Boolean) {
 
     companion object {
         fun parse(input: String): JsonObject = JsonTreeParser(input).readFully() as JsonObject
     }
 
-    constructor(input: String) : this(Parser(input))
+    constructor(input: String, handle64IntStrings: Boolean = false) : this(Parser(input), handle64IntStrings)
+
+    @Deprecated("Remains to maintain binary compatibility",
+        level = DeprecationLevel.HIDDEN)
+    constructor(input: String) : this(input, false)
 
     private fun readObject(): JsonElement {
         p.requireTc(TC_BEGIN_OBJ) { "Expected start of object" }
@@ -44,6 +48,14 @@ class JsonTreeParser internal constructor(private val p: Parser) {
 
     private fun readValue(isString: Boolean): JsonElement {
         val str = p.takeStr()
+        if (handle64IntStrings && isString) {
+            val long = str.toLongOrNull()
+            if (long != null && long > Int.MAX_VALUE) {
+                // the actual literal is a string representation
+                //of a stored long value.
+                return JsonLiteral(long, isString)
+            }
+        }
         return JsonLiteral(str, isString)
     }
 
