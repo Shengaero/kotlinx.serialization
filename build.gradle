@@ -21,10 +21,12 @@ buildscript {
         ext.compilerVersion = property('kotlin.version.snapshot')
         ext.librariesVersion = property('kotlin.version.snapshot')
         ext.serializationPluginVersion = property('plugin.version.snapshot')
+        ext.serializationCoordinates = "org.jetbrains.kotlin:kotlin-serialization"
     } else {
         ext.compilerVersion = property('kotlin.version')
         ext.librariesVersion = property('kotlin.version')
         ext.serializationPluginVersion = property('plugin.version')
+        ext.serializationCoordinates = "org.jetbrains.kotlin:kotlin-serialization"
     }
     ext.eapChannel = 'https://dl.bintray.com/kotlin/kotlin-dev'
     ext.serializationRepo = 'https://kotlin.bintray.com/kotlinx'
@@ -40,7 +42,7 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$compilerVersion"
-        classpath "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$serializationPluginVersion"
+        classpath "$serializationCoordinates:$serializationPluginVersion"
         classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:${property('konan.version')}"
 
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.2'
@@ -124,6 +126,8 @@ subprojects {
         archivesBaseName = varintName
     }
 
+    apply from: "${rootProject.rootDir}/gradle/mavenMetadata.gradle"
+
     publishing {
         publications {
             mavenProject(MavenPublication) {
@@ -134,6 +138,15 @@ subprojects {
 
                 artifact sourceJar {
                     classifier "sources"
+                }
+                pom.withXml {
+                    def root = it.asNode()
+                    // NOTE: Don't try to move top-level things (especially "description") to the pomConfig block
+                    //       because they would resolve incorrectly to top-level project properties in Gradle/Groovy
+                    root.appendNode('name', varintName)
+                    root.appendNode('description', 'Kotlin multiplatform serialization runtime library')
+                    root.appendNode('url', 'https://github.com/Kotlin/kotlinx.serialization')
+                    root.children().last() + pomConfig
                 }
             }
         }

@@ -5,7 +5,7 @@
 [![TeamCity build](https://img.shields.io/teamcity/http/teamcity.jetbrains.com/s/KotlinTools_KotlinxSerialization_Ko.svg)](https://teamcity.jetbrains.com/viewType.html?buildTypeId=KotlinTools_KotlinxSerialization_Ko&guest=1)
 [![Download](https://api.bintray.com/packages/kotlin/kotlinx/kotlinx.serialization.runtime/images/download.svg) ](https://bintray.com/kotlin/kotlinx/kotlinx.serialization.runtime/_latestVersion)
 
-Kotlin serialization support consists of three parts: a compiler plugin, which produces visitor/serializer code
+Kotlin serialization support consists of three parts: a gradle compiler plugin, which produces visitor/serializer code
 for objects, an IntelliJ plugin and a runtime library.
 
 * Supports Kotlin classes marked as `@Serializable` and standard collections. 
@@ -28,7 +28,7 @@ You can open example projects for [JVM](example-jvm) or [JS](example-js) to get 
 ## Table of contents
 
 * [Quick example](#quick-example)
-* [Upcoming changes in Kotlin 1.3](#status-in-13)
+* [Upcoming changes](#status-in-13)
 * [Library installing](#setup)
 * [Working in IntelliJ IDEA](#working-in-intellij-idea)
 * [Compatibility Notes](#compatibility)
@@ -61,14 +61,14 @@ More examples of various kinds of Kotlin classes that can be serialized can be f
 ## Status in 1.3
 
 Starting from Kotlin 1.3-RC, serialization plugin is bundled with the Kotlin compiler.
-Runtime library is under reconstruction to match the corresponding [KEEP](https://github.com/Kotlin/KEEP/blob/serialization/proposals/extensions/serialization.md).
+Runtime library is under reconstruction to match the corresponding [KEEP](https://github.com/Kotlin/KEEP/blob/serialization/proposals/extensions/serialization.md)
 To learn how to work with library on Kotlin 1.3-RC, read corresponding [document](docs/eap13.md).
 When 1.3 is released, that document will be main instruction and current readme will be archived,
 and previous versions of the runtime library will be deprecated.
 
 ## Setup
 
-Using Kotlin Serialization requires Kotlin compiler `1.1.50` or higher, recommended version is `1.2.60`. See [compatibility table](#compatibility) below.
+Using Kotlin Serialization requires Kotlin compiler `1.1.50` or higher, recommended version is `1.2.60`.
 Also, it's recommended to install [additional IDEA plugin](#working-in-intellij-idea) for better IDE experience. Otherwise,
 some valid code will be shown as red and builds will have to be launched from console or build system tasks panel.
 Example projects on JVM are available for [Gradle](example-jvm/build.gradle) and [Maven](example-jvm/pom.xml).
@@ -225,7 +225,7 @@ Because serialization is still highly experimental, it is shipped as a separate 
 You can download additional IDEA plugin for working with projects that uses serialization from its 
 TeamCity build page:
 
-* Latest release (1.2.70): [link](https://teamcity.jetbrains.com/viewLog.html?buildId=lastPinned&buildTypeId=KotlinTools_KotlinxSerialization_KotlinCompilerWithSerializationPlugin&tab=artifacts&guest=1&buildBranch=1.2.70)
+* Latest release (1.2.60): [link](https://teamcity.jetbrains.com/viewLog.html?buildId=lastPinned&buildTypeId=KotlinTools_KotlinxSerialization_KotlinCompilerWithSerializationPlugin&tab=artifacts&guest=1)
 
 * For 1.2.50 and lower (not updated): [link](https://teamcity.jetbrains.com/viewLog.html?buildId=lastPinned&buildTypeId=KotlinTools_KotlinxSerialization_KotlinCompilerWithSerializationPlugin&tab=artifacts&guest=1&buildBranch=1.2.50)
 * For 1.2.31 and lower (not updated): [link](https://teamcity.jetbrains.com/viewLog.html?buildId=lastPinned&buildTypeId=KotlinTools_KotlinxSerialization_KotlinCompilerWithSerializationPlugin&tab=artifacts&guest=1&buildBranch=1.2.30)
@@ -246,8 +246,7 @@ In case of issues with IDE, try to use gradle for running builds:
 | 0.4 – 0.4.1 | 1.2.20 – 1.2.21|
 | 0.4.2 – 0.5.0 | 1.2.30 – 1.2.41|
 | 0.5.1 - 0.6.0 | 1.2.50 - 1.2.51|
-| 0.6.1 | 1.2.60 - 1.2.61 |
-| 0.6.2 | 1.2.70 |
+| 0.6.1 | 1.2.60 |
 
 Eap compiler versions are usually supported by snapshot versions (e.g. 1.2.60-eap-* is supported only by 0.6.1-SNAPSHOT)
 
